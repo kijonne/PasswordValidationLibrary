@@ -1,10 +1,24 @@
-    - name: Run tests and generate TRX log  # Запуск тестов
+name: .NET Regression Tests
+
+on:		# Р—Р°РїСѓСЃРєР°РµС‚СЃСЏ РїСЂРё push Рё pull request РІ РІРµС‚РєСѓ master
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest # РћРЎ РІРёСЂС‚СѓР°Р»СЊРЅРѕР№ РјР°С€РёРЅС‹
+
+    steps:
+	- name: Run tests and generate TRX log  # Р—Р°РїСѓСЃРє С‚РµСЃС‚РѕРІ
       run: dotnet test --no-build --configuration Release --logger "trx;LogFileName=test_results.trx"
 
-    - name: Test Report		# Сохранение отчета
+    - name: Test Report		# РЎРѕС…СЂР°РЅРµРЅРёРµ РѕС‚С‡РµС‚Р°
       uses: dorny/test-reporter@v2
-      if: success() || failure() # запускает этот шаг в любом случае
+      if: success() || failure() # Р·Р°РїСѓСЃРєР°РµС‚ СЌС‚РѕС‚ С€Р°Рі РІ Р»СЋР±РѕРј СЃР»СѓС‡Р°Рµ
       with:
         name: Test results          
-        path: "**/*.trx"    # Путь сохранения результатов теста
-        reporter: dotnet-trx   # Формат результата
+        path: "**/*.trx"    # РџСѓС‚СЊ СЃРѕС…СЂР°РЅРµРЅРёСЏ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ С‚РµСЃС‚Р°
+        reporter: dotnet-trx   # Р¤РѕСЂРјР°С‚ СЂРµР·СѓР»СЊС‚Р°С‚Р°
+

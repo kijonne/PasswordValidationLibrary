@@ -1,4 +1,4 @@
-- name: Run tests and generate TRX log  # Запуск тестов
+    - name: Run tests and generate TRX log  # Запуск тестов
       run: dotnet test --no-build --configuration Release --logger "trx;LogFileName=test_results.trx"
 
     - name: Test Report		# Сохранение отчета
@@ -8,3 +8,4 @@
         name: Test results          
         path: "**/*.trx"    # Путь сохранения результатов теста
         reporter: dotnet-trx   # Формат результата
+

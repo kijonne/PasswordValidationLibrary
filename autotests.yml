@@ -1,28 +1,10 @@
-name: .NET Regression Tests
+- name: Run tests and generate TRX log  # Р—Р°РїСѓСЃРє С‚РµСЃС‚РѕРІ
+      run: dotnet test --no-build --configuration Release --logger "trx;LogFileName=test_results.trx"
 
-on:		# Запускается при push и pull request в ветку master
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
-
-jobs:
-  build-and-test:
-    runs-on: ubuntu-latest # ОС виртуальной машины
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4 # Клонирование репозитория на ВМ
-
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
+    - name: Test Report		# РЎРѕС…СЂР°РЅРµРЅРёРµ РѕС‚С‡РµС‚Р°
+      uses: dorny/test-reporter@v2
+      if: success() || failure() # Р·Р°РїСѓСЃРєР°РµС‚ СЌС‚РѕС‚ С€Р°Рі РІ Р»СЋР±РѕРј СЃР»СѓС‡Р°Рµ
       with:
-        dotnet-version: '8.0.x' # Установка .NET 8 на ВМ
-
-    - name: Restore dependencies
-      run: dotnet restore 		# Восстановление зависимостей
-
-    - name: Build solution		# Построение решения
-      run: dotnet build --no-restore --configuration Release
-
-    - name: Run tests			# Запуск тестов
-      run: dotnet test --no-build --configuration Release --verbosity normal
+        name: Test results          
+        path: "**/*.trx"    # РџСѓС‚СЊ СЃРѕС…СЂР°РЅРµРЅРёСЏ СЂРµР·СѓР»СЊС‚Р°С‚РѕРІ С‚РµСЃС‚Р°
+        reporter: dotnet-trx   # Р¤РѕСЂРјР°С‚ СЂРµР·СѓР»СЊС‚Р°С‚Р°
